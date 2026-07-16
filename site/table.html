@@ -10,9 +10,12 @@
 <meta property="og:title" content="A seat is being held for you">
 <meta property="og:description" content="Open Seat Club: invite-only, play-money poker nights, every seat a verified tech professional. Tel Aviv deals first.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://cdn.jsdelivr.net/gh/odedrochman/openseatclub-assets@63328d684c7a0b4c6c0c8c598cdfc95924810e41/og-felt.png">
-<meta property="og:image:width" content="600">
-<meta property="og:image:height" content="315">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/odedrochman/openseatclub-assets@79955992203d24bace0b9960f568c1b742d97818/og-felt.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/icon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <style>
   :root{
     --bone:#F4F0E6; --surface:#FBF8F0; --raised:#FFFDF7; --ink:#191E1A;
@@ -28,8 +31,9 @@
   body{background:var(--bone);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:16px}
   .wrap{max-width:720px;margin:0 auto;padding:0 20px}
   header{padding:18px 0 0}
-  .mark{font-family:var(--disp);font-size:19px;font-weight:600}
-  .mark .pip{color:var(--oxblood)}
+  .mark{display:flex;align-items:center;gap:8px;font-family:var(--disp);font-size:19px;font-weight:600}
+  .mark .pip{display:inline-flex;align-items:center}
+  .mark .pip svg{display:block}
   .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:26px 0 8px}
   h1{font-family:var(--disp);font-weight:500;font-size:clamp(26px,6vw,34px);line-height:1.15;margin-bottom:10px}
   .lede{color:var(--sec);margin-bottom:22px}
@@ -72,7 +76,7 @@
 </head>
 <body>
 <div class="wrap">
-  <header><div class="mark"><span class="pip">&#9827;</span> Open Seat Club</div></header>
+  <header><div class="mark"><span class="pip" aria-hidden="true"><svg viewBox="0 0 512 512" width="20" height="20" role="img"><circle cx="256" cy="256" r="230" fill="none" stroke="#C9AE6E" stroke-width="28" stroke-dasharray="30 20" stroke-linecap="round"/><g fill="#6B2F31"><circle cx="256" cy="172" r="74"/><circle cx="186" cy="276" r="74"/><circle cx="326" cy="276" r="74"/><path d="M256 278 C252 346 236 388 204 420 L308 420 C276 388 260 346 256 278 Z"/></g></svg></span>Open Seat Club</div></header>
 
   <p class="eyebrow" id="welcome-line">Your table &middot; Tel Aviv</p>
   <h1 id="headline">Seat 1 of 6 is yours.</h1>
@@ -197,58 +201,62 @@
     document.getElementById('err').style.display='block';
   }
 
-  /* seat card generator: role band + city only. No names, no employers. */
+  /* seat card generator: brand-kit frame (2026-07-16). Role band + city only.
+     No names, no employers. Composition mirrors brand/png/seat-card-1080x1350.png. */
   var cv=document.getElementById('cardcv'), cx=cv.getContext('2d');
-  var SUITS=['♠','♥','♦','♣'];
-  function draw(role){
-    var W=1080,H=1350;
-    var g=cx.createRadialGradient(W/2,0,120,W/2,H*0.4,H*1.1);
-    g.addColorStop(0,'#2A4A3C'); g.addColorStop(0.6,'#1E3A2E'); g.addColorStop(1,'#152A21');
-    cx.fillStyle=g; cx.fillRect(0,0,W,H);
-    /* border */
-    cx.strokeStyle='#C9AE6E'; cx.lineWidth=3; cx.strokeRect(36,36,W-72,H-72);
-    cx.strokeStyle='rgba(201,174,110,.35)'; cx.lineWidth=1; cx.strokeRect(52,52,W-104,H-104);
-    /* corner pips */
-    cx.fillStyle='rgba(201,174,110,.8)'; cx.font='44px Georgia';
-    cx.textAlign='left'; cx.fillText(SUITS[3],76,124);
-    cx.textAlign='right'; cx.fillText(SUITS[0],W-76,124);
-    cx.textAlign='left'; cx.fillText(SUITS[0],76,H-88);
-    cx.textAlign='right'; cx.fillText(SUITS[3],W-76,H-88);
-    /* wordmark */
-    cx.textAlign='center';
-    cx.fillStyle='#C9AE6E';
-    cx.font='600 34px Menlo, monospace';
-    cx.fillText('O P E N   S E A T   C L U B',W/2,190);
-    /* headline: the open seat is the star (status + invitation + scarcity) */
-    cx.fillStyle='#EFE9D8';
-    cx.font='500 84px Georgia, serif';
-    cx.fillText('One seat open',W/2,340);
-    cx.fillText('at my table.',W/2,435);
-    /* seat oval */
+  function pipMark(x,y,r,pipColor,ringColor){
+    /* dashed open-seat ring with the club pip inside (the logomark) */
     cx.save();
-    cx.strokeStyle='rgba(201,174,110,.6)'; cx.lineWidth=2;
-    cx.beginPath(); cx.ellipse(W/2,720,330,190,0,0,Math.PI*2); cx.stroke();
-    cx.setLineDash([6,10]);
-    cx.beginPath(); cx.ellipse(W/2,720,270,140,0,0,Math.PI*2); cx.stroke();
+    cx.strokeStyle=ringColor; cx.lineWidth=r*0.055;
+    cx.setLineDash([r*0.118,r*0.079]); cx.lineCap='round';
+    cx.beginPath(); cx.arc(x,y,r*0.9,0,Math.PI*2); cx.stroke();
+    cx.setLineDash([]);
+    var s=r/256; /* pip geometry from the 512-viewBox mark master */
+    cx.fillStyle=pipColor;
+    cx.beginPath(); cx.arc(x,y+(172-256)*s,74*s,0,Math.PI*2); cx.fill();
+    cx.beginPath(); cx.arc(x+(186-256)*s,y+(276-256)*s,74*s,0,Math.PI*2); cx.fill();
+    cx.beginPath(); cx.arc(x+(326-256)*s,y+(276-256)*s,74*s,0,Math.PI*2); cx.fill();
+    cx.beginPath();
+    cx.moveTo(x,y+22*s);
+    cx.bezierCurveTo(x-4*s,y+90*s,x-20*s,y+132*s,x-52*s,y+164*s);
+    cx.lineTo(x+52*s,y+164*s);
+    cx.bezierCurveTo(x+20*s,y+132*s,x+4*s,y+90*s,x,y+22*s);
+    cx.closePath(); cx.fill();
     cx.restore();
-    /* the six seats around the oval: five taken (solid), the open one in gold */
-    var pts=[[W/2,505],[W/2+300,610],[W/2+300,830],[W/2,935],[W/2-300,830],[W/2-300,610]];
-    for(var i=0;i<6;i++){
-      cx.beginPath(); cx.arc(pts[i][0],pts[i][1],i===3?32:26,0,Math.PI*2);
-      if(i===3){ cx.strokeStyle='#C9AE6E'; cx.lineWidth=4; cx.setLineDash([7,8]); cx.stroke(); cx.setLineDash([]); }
-      else{ cx.fillStyle='rgba(239,233,216,.28)'; cx.fill();
-            cx.strokeStyle='rgba(239,233,216,.7)'; cx.lineWidth=2; cx.stroke(); }
-    }
-    cx.fillStyle='#C9AE6E'; cx.font='38px Georgia, serif';
-    cx.fillText('Seat 4 · open',W/2,745);
+  }
+  function mono(px){ if('letterSpacing' in cx) cx.letterSpacing=Math.round(px*0.28)+'px'; cx.font='500 '+px+'px Menlo, Consolas, monospace'; }
+  function monoOff(){ if('letterSpacing' in cx) cx.letterSpacing='0px'; }
+  function draw(role){
+    var W=1080,H=1350,GOLD='#C9AE6E',CREAM='#EFE9D8';
+    cx.fillStyle='#1E3A2E'; cx.fillRect(0,0,W,H);
+    /* double frame */
+    cx.strokeStyle=GOLD; cx.lineWidth=2; cx.strokeRect(44,44,W-88,H-88);
+    cx.strokeStyle='rgba(201,174,110,.45)'; cx.lineWidth=1; cx.strokeRect(56,56,W-112,H-112);
+    /* logomark: cream pip in dashed gold ring */
+    pipMark(W/2,178,52,CREAM,GOLD);
+    /* eyebrow */
+    cx.textAlign='center'; cx.fillStyle=GOLD;
+    mono(26); cx.fillText('OPEN SEAT CLUB · TEL AVIV',W/2,272); monoOff();
+    /* headline */
+    cx.fillStyle=CREAM; cx.font='600 100px Spectral, Georgia, serif';
+    cx.fillText('One seat open.',W/2,388);
+    /* table motif: gold oval, five cream seats, the open seat dashed at the top */
+    cx.strokeStyle=GOLD; cx.lineWidth=2;
+    cx.beginPath(); cx.ellipse(W/2,762,224,128,0,0,Math.PI*2); cx.stroke();
+    var seats=[[W/2-240,672],[W/2+240,672],[W/2-240,852],[W/2+240,852],[W/2,940]];
+    cx.fillStyle=CREAM;
+    for(var i=0;i<5;i++){ cx.beginPath(); cx.arc(seats[i][0],seats[i][1],26,0,Math.PI*2); cx.fill(); }
+    cx.save();
+    cx.strokeStyle=GOLD; cx.lineWidth=5; cx.setLineDash([13,10]); cx.lineCap='round';
+    cx.beginPath(); cx.arc(W/2,588,26,0,Math.PI*2); cx.stroke();
+    cx.restore();
     /* role band + city: the whole identity, coarse on purpose */
-    cx.fillStyle='#EFE9D8'; cx.font='54px Georgia, serif';
-    cx.fillText(role,W/2,1090);
-    cx.fillStyle='#9FB3A3'; cx.font='32px Menlo, monospace';
-    cx.fillText('TEL AVIV FOUNDING COHORT',W/2,1150);
-    /* footer line */
-    cx.fillStyle='rgba(239,233,216,.65)'; cx.font='28px Georgia, serif';
-    cx.fillText('Play money. Real people. openseat.club',W/2,1246);
+    cx.fillStyle=CREAM; mono(30);
+    cx.fillText((role+' · Tel Aviv').toUpperCase(),W/2,1132); monoOff();
+    cx.strokeStyle=GOLD; cx.lineWidth=1;
+    cx.beginPath(); cx.moveTo(W/2-32,1168); cx.lineTo(W/2+32,1168); cx.stroke();
+    cx.fillStyle=GOLD; cx.font='italic 500 34px Spectral, Georgia, serif';
+    cx.fillText('Play money. Real people.',W/2,1224);
     /* refresh preview + download */
     var url=cv.toDataURL('image/png');
     document.getElementById('cardprev').src=url;
