@@ -8,7 +8,7 @@
 <meta name="description" content="Your table at the Open Seat Club: six seats, five to deal in.">
 <title>Your table · Open Seat Club</title>
 <meta property="og:title" content="A seat is being held for you">
-<meta property="og:description" content="Open Seat Club: invite-only, no-stakes poker, every seat a verified working professional. Tel Aviv deals first.">
+<meta property="og:description" content="Open Seat Club: invite-only, play-money poker nights, every seat a verified tech professional. Tel Aviv deals first.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://cdn.jsdelivr.net/gh/odedrochman/openseatclub-assets@63328d684c7a0b4c6c0c8c598cdfc95924810e41/og-felt.png">
 <meta property="og:image:width" content="600">
@@ -143,7 +143,7 @@
   var invite=ORIGIN+'/?seat='+encodeURIComponent(code);
 
   var WA='I am holding a seat for you at my table at the Open Seat Club. Invite-only poker night, play money, every seat a verified senior tech person. Tel Aviv nights are forming now. Take the seat: '+invite;
-  var LI='I have a seat at the Open Seat Club. Six seats a table, play money, every seat a verified working professional. LinkedIn is where you list who you are. This is where people find out. My table has open seats, link in the first comment.';
+  var LI='One seat open at my table at the Open Seat Club. Play-money poker night, six seats, every seat a verified working professional. LinkedIn is where you list who you are. This is where people find out. Want the seat? Link in the first comment.';
 
   document.getElementById('wamsg').textContent=WA;
   document.getElementById('limsg').textContent=LI;
@@ -219,10 +219,11 @@
     cx.fillStyle='#C9AE6E';
     cx.font='600 34px Menlo, monospace';
     cx.fillText('O P E N   S E A T   C L U B',W/2,190);
-    /* headline */
+    /* headline: the open seat is the star (status + invitation + scarcity) */
     cx.fillStyle='#EFE9D8';
-    cx.font='500 92px Georgia, serif';
-    cx.fillText('I have a seat.',W/2,430);
+    cx.font='500 84px Georgia, serif';
+    cx.fillText('One seat open',W/2,340);
+    cx.fillText('at my table.',W/2,435);
     /* seat oval */
     cx.save();
     cx.strokeStyle='rgba(201,174,110,.6)'; cx.lineWidth=2;
@@ -230,15 +231,16 @@
     cx.setLineDash([6,10]);
     cx.beginPath(); cx.ellipse(W/2,720,270,140,0,0,Math.PI*2); cx.stroke();
     cx.restore();
-    /* the six seats around the oval */
+    /* the six seats around the oval: five taken (solid), the open one in gold */
     var pts=[[W/2,505],[W/2+300,610],[W/2+300,830],[W/2,935],[W/2-300,830],[W/2-300,610]];
     for(var i=0;i<6;i++){
-      cx.beginPath(); cx.arc(pts[i][0],pts[i][1],26,0,Math.PI*2);
-      if(i===3){ cx.fillStyle='#C9AE6E'; cx.fill(); }
-      else{ cx.strokeStyle='rgba(239,233,216,.5)'; cx.lineWidth=2; cx.setLineDash(i===3?[]:[4,6]); cx.stroke(); cx.setLineDash([]); }
+      cx.beginPath(); cx.arc(pts[i][0],pts[i][1],i===3?32:26,0,Math.PI*2);
+      if(i===3){ cx.strokeStyle='#C9AE6E'; cx.lineWidth=4; cx.setLineDash([7,8]); cx.stroke(); cx.setLineDash([]); }
+      else{ cx.fillStyle='rgba(239,233,216,.28)'; cx.fill();
+            cx.strokeStyle='rgba(239,233,216,.7)'; cx.lineWidth=2; cx.stroke(); }
     }
-    cx.fillStyle='#EFE9D8'; cx.font='38px Georgia, serif';
-    cx.fillText('Seat 4 · taken',W/2,745);
+    cx.fillStyle='#C9AE6E'; cx.font='38px Georgia, serif';
+    cx.fillText('Seat 4 · open',W/2,745);
     /* role band + city: the whole identity, coarse on purpose */
     cx.fillStyle='#EFE9D8'; cx.font='54px Georgia, serif';
     cx.fillText(role,W/2,1090);
