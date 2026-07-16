@@ -118,8 +118,13 @@
   </div>
 
   <div class="card">
-    <h2>Your seat card</h2>
-    <p class="small">A share image for LinkedIn. Role band and city only: no names, no employers. That is the house style.</p>
+    <h2>Your share card</h2>
+    <p class="small">A share image for LinkedIn. Role bands and city only: no names, no employers. That is the house style.</p>
+    <label for="cardtype">Card</label>
+    <select id="cardtype">
+      <option value="seat">My seat card</option>
+      <option value="table">The table card (the room, one seat open)</option>
+    </select>
     <label for="role">Role band on the card</label>
     <select id="role">
       <option>Engineering leader</option>
@@ -134,6 +139,14 @@
     <div class="btnrow">
       <a class="btn ghost" id="dl" download="open-seat-club-seat-card.png" href="#">Download seat card</a>
     </div>
+  </div>
+
+  <div class="card" id="tellcard" style="display:none">
+    <h2>Today's tell question</h2>
+    <p class="small">One tap a day. Twelve taps in, your tell profile starts forming. Skipping costs nothing.</p>
+    <p id="tellq" style="font-family:var(--disp);font-size:17px;margin:6px 0 10px"></p>
+    <div class="btnrow" id="tellopts"></div>
+    <p class="small" id="tellnote" style="margin:10px 0 0"></p>
   </div>
 
   <footer>&copy; 2026 Open Seat Club &middot; no tracking pixels &middot; house rules</footer>
@@ -189,11 +202,16 @@
   }
   renderSeats(1,0);
 
+  var tableData={seats:1,roleBands:[]};
   if(code){
     fetch('/api/table?c='+encodeURIComponent(code)).then(function(r){
       if(!r.ok) throw 0; return r.json();
     }).then(function(d){
-      if(d && d.ok) renderSeats(d.seats,d.pending||0);
+      if(d && d.ok){
+        renderSeats(d.seats,d.pending||0);
+        tableData={seats:d.seats,roleBands:d.roleBands||[]};
+        if(document.getElementById('cardtype').value==='table') redraw();
+      }
       else throw 0;
     }).catch(function(){
       document.getElementById('err').style.display='block';
@@ -258,14 +276,103 @@
     cx.beginPath(); cx.moveTo(W/2-32,1168); cx.lineTo(W/2+32,1168); cx.stroke();
     cx.fillStyle=GOLD; cx.font='italic 500 34px Spectral, Georgia, serif';
     cx.fillText('Play money. Real people.',W/2,1224);
-    /* refresh preview + download */
+    refreshPreview();
+  }
+  /* table card (4c ruling): the room, role bands + one open seat, never a person */
+  function drawTable(){
+    var W=1080,H=1350,GOLD='#C9AE6E',CREAM='#EFE9D8';
+    var myRole=document.getElementById('role').value;
+    var bands=[myRole].concat(tableData.roleBands||[]).slice(0,6);
+    var open=6-bands.length;
+    cx.fillStyle='#1E3A2E'; cx.fillRect(0,0,W,H);
+    cx.strokeStyle=GOLD; cx.lineWidth=2; cx.strokeRect(44,44,W-88,H-88);
+    cx.strokeStyle='rgba(201,174,110,.45)'; cx.lineWidth=1; cx.strokeRect(56,56,W-112,H-112);
+    pipMark(W/2,166,48,CREAM,GOLD);
+    cx.textAlign='center'; cx.fillStyle=GOLD;
+    mono(26); cx.fillText('OPEN SEAT CLUB · TEL AVIV',W/2,252); monoOff();
+    /* honest headline: say exactly how many seats are open */
+    var words=['','One','Two','Three','Four','Five'];
+    var head = open===0 ? 'This table is dealt.'
+             : open===1 ? 'One seat open.'
+             : words[open]+' seats open.';
+    cx.fillStyle=CREAM; cx.font='600 92px Spectral, Georgia, serif';
+    cx.fillText(head,W/2,362);
+    /* motif: oval with taken seats cream, open seats dashed, first open at top */
+    cx.strokeStyle=GOLD; cx.lineWidth=2;
+    cx.beginPath(); cx.ellipse(W/2,610,210,104,0,0,Math.PI*2); cx.stroke();
+    var spots=[[W/2,478],[W/2+228,536],[W/2+228,688],[W/2,742],[W/2-228,688],[W/2-228,536]];
+    for(var i=0;i<6;i++){
+      var taken = open>0 ? (i>0 && i<=bands.length) : (i<bands.length);
+      if(taken){ cx.fillStyle=CREAM; cx.beginPath(); cx.arc(spots[i][0],spots[i][1],24,0,Math.PI*2); cx.fill(); }
+      else { cx.save(); cx.strokeStyle=GOLD; cx.lineWidth=5; cx.setLineDash([12,9]); cx.lineCap='round';
+             cx.beginPath(); cx.arc(spots[i][0],spots[i][1],24,0,Math.PI*2); cx.stroke(); cx.restore(); }
+    }
+    /* the room, as a list: roles only */
+    var y=856;
+    for(var s=0;s<6;s++){
+      cx.fillStyle='#9FB3A3'; mono(20); cx.textAlign='left';
+      cx.fillText('SEAT '+(s+1),140,y); monoOff();
+      cx.font='400 34px Spectral, Georgia, serif';
+      if(s<bands.length){ cx.fillStyle=CREAM; cx.fillText(bands[s],340,y); }
+      else { cx.fillStyle=GOLD; cx.fillText('Open',340,y); }
+      y+=56;
+    }
+    cx.textAlign='center';
+    cx.strokeStyle=GOLD; cx.lineWidth=1;
+    cx.beginPath(); cx.moveTo(W/2-32,1188); cx.lineTo(W/2+32,1188); cx.stroke();
+    cx.fillStyle=GOLD; cx.font='italic 500 34px Spectral, Georgia, serif';
+    cx.fillText('Play money. Real people.',W/2,1244);
+    refreshPreview();
+  }
+  function refreshPreview(){
     var url=cv.toDataURL('image/png');
+    var dl=document.getElementById('dl');
     document.getElementById('cardprev').src=url;
-    document.getElementById('dl').href=url;
+    dl.href=url;
+    dl.download='open-seat-club-'+(document.getElementById('cardtype').value==='table'?'table':'seat')+'-card.png';
+  }
+  function redraw(){
+    if(document.getElementById('cardtype').value==='table') drawTable();
+    else draw(document.getElementById('role').value);
   }
   var sel=document.getElementById('role');
-  sel.addEventListener('change',function(){ draw(sel.value); });
+  sel.addEventListener('change',redraw);
+  document.getElementById('cardtype').addEventListener('change',redraw);
   draw(sel.value);
+
+  /* daily tell question: shows only when the API is live and the code is
+     verified; otherwise the card stays hidden (no broken promises). */
+  function tellNote(msg){ document.getElementById('tellnote').textContent=msg; }
+  function renderTell(d){
+    var card=document.getElementById('tellcard');
+    var opts=document.getElementById('tellopts');
+    document.getElementById('tellq').textContent=d.question;
+    while(opts.firstChild) opts.removeChild(opts.firstChild);
+    if(d.answered!==null && d.answered!==undefined){
+      tellNote('Noted. Your profile has '+d.profileSize+' answers. Tomorrow deals the next one.');
+    } else {
+      d.answers.forEach(function(label,i){
+        var b=document.createElement('button');
+        b.className='mini'; b.type='button'; b.textContent=label;
+        b.addEventListener('click',function(){
+          fetch('/api/tell',{method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({c:code,day:d.day,choice:i})})
+          .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+          .then(function(res){
+            while(opts.firstChild) opts.removeChild(opts.firstChild);
+            tellNote('Noted. Your profile has '+res.profileSize+' answers. Tomorrow deals the next one.');
+          }).catch(function(){ tellNote('That did not save. Nothing lost; try again in a moment.'); });
+        });
+        opts.appendChild(b);
+      });
+    }
+    card.style.display='block';
+  }
+  if(code){
+    fetch('/api/tell?c='+encodeURIComponent(code)).then(function(r){
+      if(!r.ok) throw 0; return r.json();
+    }).then(function(d){ if(d && d.ok) renderTell(d); }).catch(function(){ /* stays hidden */ });
+  }
 })();
 </script>
 </body>

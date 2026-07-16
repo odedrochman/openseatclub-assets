@@ -245,7 +245,7 @@
   rbody.style.height=(COS.length*ROWH)+'px';
 
   function statusHTML(co){
-    if(co.m>=10) return '<span class="open">Table open</span>';
+    if(co.m>=10) return '<span class="open">Ten seats unlocked</span>';
     var left=10-co.m;
     return '<span class="'+(left<=3?'near':'')+'">'+left+' to unlock</span>';
   }
