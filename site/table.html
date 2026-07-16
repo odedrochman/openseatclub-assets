@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F4F0E6">
+<meta name="robots" content="noindex">
+<meta name="description" content="Your table at the Open Seat Club: six seats, five to deal in.">
+<title>Your table · Open Seat Club</title>
+<meta property="og:title" content="A seat is being held for you">
+<meta property="og:description" content="Open Seat Club: invite-only, no-stakes poker, every seat a verified working professional. Tel Aviv deals first.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/odedrochman/openseatclub-assets@63328d684c7a0b4c6c0c8c598cdfc95924810e41/og-felt.png">
+<meta property="og:image:width" content="600">
+<meta property="og:image:height" content="315">
+<style>
+  :root{
+    --bone:#F4F0E6; --surface:#FBF8F0; --raised:#FFFDF7; --ink:#191E1A;
+    --sec:#49514A; --muted:#79806F; --border:#DFD8C6;
+    --pine:#24463A; --pine2:#183227; --brass:#96793D; --oxblood:#6B2F31;
+    --felt:#1E3A2E; --gold:#C9AE6E; --green:#7FBF98; --cream:#EFE9D8; --sage:#9FB3A3;
+    --disp:"Spectral", Georgia, "Times New Roman", serif;
+    --body:"Alegreya Sans", "Gill Sans", "Segoe UI", system-ui, sans-serif;
+    --mono:"IBM Plex Mono", "SF Mono", Menlo, Consolas, monospace;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{overflow-x:clip}
+  body{background:var(--bone);color:var(--ink);font-family:var(--body);line-height:1.55;font-size:16px}
+  .wrap{max-width:720px;margin:0 auto;padding:0 20px}
+  header{padding:18px 0 0}
+  .mark{font-family:var(--disp);font-size:19px;font-weight:600}
+  .mark .pip{color:var(--oxblood)}
+  .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:26px 0 8px}
+  h1{font-family:var(--disp);font-weight:500;font-size:clamp(26px,6vw,34px);line-height:1.15;margin-bottom:10px}
+  .lede{color:var(--sec);margin-bottom:22px}
+  /* felt */
+  .feltbox{position:relative;background:radial-gradient(130% 150% at 50% 0%,#2A4A3C 0%,var(--felt) 62%,#152A21 100%);border:1px solid var(--gold);border-radius:18px;padding:22px 18px 18px;color:var(--cream);box-shadow:0 18px 40px rgba(21,42,33,.28)}
+  .fhd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .fname{font-family:var(--disp);font-size:18px}
+  .fstat{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--gold)}
+  .seats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  @media(max-width:430px){ .seats{grid-template-columns:repeat(2,1fr)} }
+  .seat{border:1px dashed rgba(201,174,110,.55);border-radius:12px;min-height:86px;padding:10px 12px;background:rgba(255,253,247,.03);display:flex;flex-direction:column;justify-content:center;gap:3px}
+  .seat.full{border-style:solid;background:rgba(255,253,247,.08)}
+  .seat .sn{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--sage)}
+  .seat .sv{font-weight:700;font-size:14.5px}
+  .seat.you .sv{color:var(--gold)}
+  .seat .open{color:rgba(239,233,216,.55);font-size:13px}
+  .fnote{font-family:var(--mono);font-size:11px;color:var(--sage);margin-top:12px}
+  /* share blocks */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;margin-top:16px}
+  .card h2{font-family:var(--disp);font-weight:500;font-size:19px;margin-bottom:6px}
+  .card p.small{font-size:14px;color:var(--sec);margin-bottom:10px}
+  .linkrow{display:flex;gap:8px;align-items:stretch}
+  .linkbox{flex:1;font-family:var(--mono);font-size:12.5px;background:var(--raised);border:1px dashed var(--brass);border-radius:8px;padding:10px 12px;word-break:break-all;color:var(--sec)}
+  .msg{font-size:14.5px;background:var(--raised);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--ink);white-space:pre-wrap;margin-bottom:10px}
+  .btn{display:inline-block;font-family:var(--body);font-weight:700;font-size:15px;color:var(--cream);background:var(--pine);border:1px solid var(--pine);border-radius:8px;padding:11px 18px;cursor:pointer;text-decoration:none;text-align:center}
+  .btn:hover{background:var(--pine2)}
+  .btn.wa{background:#1FAF57;border-color:#1FAF57}
+  .btn.ghost{background:transparent;color:var(--pine)}
+  .mini{font-family:var(--mono);font-size:12px;padding:9px 13px;border:1px solid var(--border);border-radius:8px;background:var(--raised);color:var(--sec);cursor:pointer;white-space:nowrap}
+  .mini:hover{border-color:var(--muted)}
+  .mini.done{border-color:var(--green);color:var(--pine)}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:10px 0 4px}
+  select{font-family:var(--body);font-size:15px;padding:9px 10px;border:1px solid var(--border);border-radius:8px;background:var(--raised);color:var(--ink);width:100%;max-width:340px}
+  canvas#cardcv{display:none}
+  .cardprev{width:100%;max-width:340px;border-radius:12px;border:1px solid var(--border);display:block;margin:12px 0}
+  footer{padding:34px 0 44px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .err{display:none;background:rgba(107,47,49,.08);border:1px solid rgba(107,47,49,.35);color:var(--oxblood);border-radius:10px;padding:14px;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="mark"><span class="pip">&#9827;</span> Open Seat Club</div></header>
+
+  <p class="eyebrow" id="welcome-line">Your table &middot; Tel Aviv</p>
+  <h1 id="headline">Seat 1 of 6 is yours.</h1>
+  <p class="lede">You are not in a line, you are filling a table. Deal in five people you would actually sit with. A full table plays on the next city night.</p>
+
+  <div class="err" id="err">This table link is not valid. <a href="/">Request a seat</a> and your table appears here.</div>
+
+  <div class="feltbox" id="felt">
+    <div class="fhd"><span class="fname">Your table</span><span class="fstat" id="fstat">1 OF 6 SEATED</span></div>
+    <div class="seats" id="seats"></div>
+    <p class="fnote">Seats show as roles, never names, until people choose to connect at the table.</p>
+  </div>
+
+  <div class="card">
+    <h2>Deal someone in on WhatsApp</h2>
+    <p class="small">The message is written. Pick the person you would most want across the felt.</p>
+    <div class="msg" id="wamsg"></div>
+    <div class="btnrow">
+      <a class="btn wa" id="wabtn" href="#" target="_blank" rel="noopener">Send on WhatsApp</a>
+      <button class="mini" data-copy="wamsg">Copy message</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Your invite link</h2>
+    <p class="small">Anyone who signs up through it takes a seat at your table.</p>
+    <div class="linkrow">
+      <div class="linkbox" id="invlink"></div>
+      <button class="mini" data-copy="invlink">Copy</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>For LinkedIn</h2>
+    <p class="small">Post the text, put your invite link in the first comment. LinkedIn buries posts with links in the body.</p>
+    <div class="msg" id="limsg"></div>
+    <div class="btnrow"><button class="mini" data-copy="limsg">Copy post</button></div>
+  </div>
+
+  <div class="card">
+    <h2>Your seat card</h2>
+    <p class="small">A share image for LinkedIn. Role band and city only: no names, no employers. That is the house style.</p>
+    <label for="role">Role band on the card</label>
+    <select id="role">
+      <option>Engineering leader</option>
+      <option>Product leader</option>
+      <option>Founder</option>
+      <option>Design leader</option>
+      <option>Data leader</option>
+      <option>Senior operator</option>
+    </select>
+    <img class="cardprev" id="cardprev" alt="Preview of your seat card">
+    <canvas id="cardcv" width="1080" height="1350"></canvas>
+    <div class="btnrow">
+      <a class="btn ghost" id="dl" download="open-seat-club-seat-card.png" href="#">Download seat card</a>
+    </div>
+  </div>
+
+  <footer>&copy; 2026 Open Seat Club &middot; no tracking pixels &middot; house rules</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var qs=new URLSearchParams(location.search);
+  var code=(qs.get('c')||'').toLowerCase().slice(0,16);
+  var ORIGIN=location.origin;
+  var invite=ORIGIN+'/?seat='+encodeURIComponent(code);
+
+  var WA='I am holding a seat for you at my table at the Open Seat Club. Invite-only poker night, play money, every seat a verified senior tech person. Tel Aviv nights are forming now. Take the seat: '+invite;
+  var LI='I have a seat at the Open Seat Club. Six seats a table, play money, every seat a verified working professional. LinkedIn is where you list who you are. This is where people find out. My table has open seats, link in the first comment.';
+
+  document.getElementById('wamsg').textContent=WA;
+  document.getElementById('limsg').textContent=LI;
+  document.getElementById('invlink').textContent=invite;
+  document.getElementById('wabtn').href='https://wa.me/?text='+encodeURIComponent(WA);
+  if(qs.get('welcome')){ document.getElementById('welcome-line').textContent='Verified · Your table · Tel Aviv'; }
+
+  /* copy buttons */
+  document.querySelectorAll('[data-copy]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=document.getElementById(b.getAttribute('data-copy')).textContent;
+      (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){
+        b.classList.add('done'); var old=b.textContent; b.textContent='Copied';
+        setTimeout(function(){ b.classList.remove('done'); b.textContent=old; },1600);
+      }).catch(function(){
+        var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta);
+        ta.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(ta);
+        b.textContent='Copied'; setTimeout(function(){ b.textContent='Copy'; },1600);
+      });
+    });
+  });
+
+  /* seats */
+  var seatsEl=document.getElementById('seats');
+  function renderSeats(filled,pending){
+    seatsEl.innerHTML='';
+    for(var i=1;i<=6;i++){
+      var d=document.createElement('div');
+      if(i===1){ d.className='seat full you'; d.innerHTML='<span class="sn">Seat 1</span><span class="sv">You</span>'; }
+      else if(i<=filled){ d.className='seat full'; d.innerHTML='<span class="sn">Seat '+i+'</span><span class="sv">Taken &middot; verified</span>'; }
+      else if(i<=filled+pending){ d.className='seat'; d.innerHTML='<span class="sn">Seat '+i+'</span><span class="open">invited &middot; verifying</span>'; }
+      else { d.className='seat'; d.innerHTML='<span class="sn">Seat '+i+'</span><span class="open">open</span>'; }
+      seatsEl.appendChild(d);
+    }
+    document.getElementById('fstat').textContent=Math.min(filled,6)+' OF 6 SEATED';
+    if(filled>=6){ document.getElementById('headline').textContent='Your table is full. It plays next city night.'; }
+    else if(filled>1){ document.getElementById('headline').textContent='Seat '+filled+' of 6 filled. '+(6-filled)+' to go.'; }
+  }
+  renderSeats(1,0);
+
+  if(code){
+    fetch('/api/table?c='+encodeURIComponent(code)).then(function(r){
+      if(!r.ok) throw 0; return r.json();
+    }).then(function(d){
+      if(d && d.ok) renderSeats(d.seats,d.pending||0);
+      else throw 0;
+    }).catch(function(){
+      document.getElementById('err').style.display='block';
+    });
+  } else {
+    document.getElementById('err').style.display='block';
+  }
+
+  /* seat card generator: role band + city only. No names, no employers. */
+  var cv=document.getElementById('cardcv'), cx=cv.getContext('2d');
+  var SUITS=['♠','♥','♦','♣'];
+  function draw(role){
+    var W=1080,H=1350;
+    var g=cx.createRadialGradient(W/2,0,120,W/2,H*0.4,H*1.1);
+    g.addColorStop(0,'#2A4A3C'); g.addColorStop(0.6,'#1E3A2E'); g.addColorStop(1,'#152A21');
+    cx.fillStyle=g; cx.fillRect(0,0,W,H);
+    /* border */
+    cx.strokeStyle='#C9AE6E'; cx.lineWidth=3; cx.strokeRect(36,36,W-72,H-72);
+    cx.strokeStyle='rgba(201,174,110,.35)'; cx.lineWidth=1; cx.strokeRect(52,52,W-104,H-104);
+    /* corner pips */
+    cx.fillStyle='rgba(201,174,110,.8)'; cx.font='44px Georgia';
+    cx.textAlign='left'; cx.fillText(SUITS[3],76,124);
+    cx.textAlign='right'; cx.fillText(SUITS[0],W-76,124);
+    cx.textAlign='left'; cx.fillText(SUITS[0],76,H-88);
+    cx.textAlign='right'; cx.fillText(SUITS[3],W-76,H-88);
+    /* wordmark */
+    cx.textAlign='center';
+    cx.fillStyle='#C9AE6E';
+    cx.font='600 34px Menlo, monospace';
+    cx.fillText('O P E N   S E A T   C L U B',W/2,190);
+    /* headline */
+    cx.fillStyle='#EFE9D8';
+    cx.font='500 92px Georgia, serif';
+    cx.fillText('I have a seat.',W/2,430);
+    /* seat oval */
+    cx.save();
+    cx.strokeStyle='rgba(201,174,110,.6)'; cx.lineWidth=2;
+    cx.beginPath(); cx.ellipse(W/2,720,330,190,0,0,Math.PI*2); cx.stroke();
+    cx.setLineDash([6,10]);
+    cx.beginPath(); cx.ellipse(W/2,720,270,140,0,0,Math.PI*2); cx.stroke();
+    cx.restore();
+    /* the six seats around the oval */
+    var pts=[[W/2,505],[W/2+300,610],[W/2+300,830],[W/2,935],[W/2-300,830],[W/2-300,610]];
+    for(var i=0;i<6;i++){
+      cx.beginPath(); cx.arc(pts[i][0],pts[i][1],26,0,Math.PI*2);
+      if(i===3){ cx.fillStyle='#C9AE6E'; cx.fill(); }
+      else{ cx.strokeStyle='rgba(239,233,216,.5)'; cx.lineWidth=2; cx.setLineDash(i===3?[]:[4,6]); cx.stroke(); cx.setLineDash([]); }
+    }
+    cx.fillStyle='#EFE9D8'; cx.font='38px Georgia, serif';
+    cx.fillText('Seat 4 · taken',W/2,745);
+    /* role band + city: the whole identity, coarse on purpose */
+    cx.fillStyle='#EFE9D8'; cx.font='54px Georgia, serif';
+    cx.fillText(role,W/2,1090);
+    cx.fillStyle='#9FB3A3'; cx.font='32px Menlo, monospace';
+    cx.fillText('TEL AVIV FOUNDING COHORT',W/2,1150);
+    /* footer line */
+    cx.fillStyle='rgba(239,233,216,.65)'; cx.font='28px Georgia, serif';
+    cx.fillText('Play money. Real people. openseat.club',W/2,1246);
+    /* refresh preview + download */
+    var url=cv.toDataURL('image/png');
+    document.getElementById('cardprev').src=url;
+    document.getElementById('dl').href=url;
+  }
+  var sel=document.getElementById('role');
+  sel.addEventListener('change',function(){ draw(sel.value); });
+  draw(sel.value);
+})();
+</script>
+</body>
+</html>
